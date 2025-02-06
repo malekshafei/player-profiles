@@ -1003,7 +1003,8 @@ with st.sidebar:
 
 
             
-
+output_dir = './saved_images'  # Save it inside your Streamlit app folder
+os.makedirs(output_dir, exist_ok=True)
 
 
 
@@ -1563,7 +1564,7 @@ if start_graphic:
         width, height = img.size 
         #print(img.size)
         cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
-        visual_file_name = f"/Users/malekshafei/Documents/{player}ShotMap.png"
+        visual_file_name = os.path.join(output_dir, f"{player}ShotMap.png")
         cropped_img.save(visual_file_name)
 
 
@@ -1671,7 +1672,7 @@ if start_graphic:
         #print(img.size)
         #cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
         cropped_img = img.crop((30, 50, 760, 470)) #(left, upper, right, lower)
-        visual_file_name = f"/Users/malekshafei/Documents/{player}ShotMap.png"
+        visual_file_name = os.path.join(output_dir, f"{player}ShotMap.png")
         cropped_img.save(visual_file_name)
 
 
@@ -1777,7 +1778,7 @@ if start_graphic:
         #print(img.size)
         #cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
         cropped_img = img.crop((150, 30, 760, 530)) #(left, upper, right, lower)
-        visual_file_name = f"/Users/malekshafei/Documents/{player}ShotMap.png"
+        visual_file_name = os.path.join(output_dir, f"{player}ShotMap.png")
         cropped_img.save(visual_file_name)
 
 
@@ -1872,7 +1873,7 @@ if start_graphic:
         #print(img.size)
         #cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
         cropped_img = img.crop((150, 30, 760, 530)) #(left, upper, right, lower)
-        visual_file_name = f"/Users/malekshafei/Documents/{player}ShotMap.png"
+        visual_file_name = os.path.join(output_dir, f"{player}ShotMap.png")
         cropped_img.save(visual_file_name)
 
 
@@ -1925,7 +1926,7 @@ if start_graphic:
         
         cropped_img = img.crop((10, 10, 1125, 770)) #(left, upper, right, lower)
         #cropped_img = img.crop((147, 20, 760, 550)) #(left, upper, right, lower)
-        visual_file_name = f"/Users/malekshafei/Documents/{player}ShotMap.png"
+        visual_file_name = os.path.join(output_dir, f"{player}ShotMap.png")
         #img.save(visual_file_name)
         cropped_img.save(visual_file_name)
 
@@ -1979,10 +1980,13 @@ if start_graphic:
         img = Image.open(buf)
         width, height = img.size 
         #print(img.size)
+
+        output_dir = './saved_images'  # Save it inside your Streamlit app folder
+        os.makedirs(output_dir, exist_ok=True)
         
         cropped_img = img.crop((10, 10, 1125, 770)) #(left, upper, right, lower)
         #cropped_img = img.crop((147, 20, 760, 550)) #(left, upper, right, lower)
-        visual_file_name = f"/Users/malekshafei/Documents/{player}ShotMap.png"
+        visual_file_name = os.path.join(output_dir, f"{player}ShotMap.png")
         #img.save(visual_file_name)
         cropped_img.save(visual_file_name)
 
@@ -2131,24 +2135,22 @@ if start_graphic:
         width, height = img.size 
         #print(img.size)
         
+        output_dir = './saved_images'  # Save it inside your Streamlit app folder
+        os.makedirs(output_dir, exist_ok=True)
+
         cropped_img = img#img.crop((10, 10, 1125, 770)) #(left, upper, right, lower)
         #cropped_img = img.crop((147, 20, 760, 550)) #(left, upper, right, lower)
-        visual_file_name = f"/Users/malekshafei/Documents/{player}ShotMap.png"
+        visual_file_name = visual_file_name = os.path.join(output_dir, f"{player}ShotMap.png")
+
+        #f"/Users/malekshafei/Documents/{player}ShotMap.png"
         #img.save(visual_file_name)
         cropped_img.save(visual_file_name)
-
-
         
         #fig2.savefig(visual_file_name)
         plt.close(fig2)
 
         zoom = 0.37
-        #print(max_metric_length)
-        # if max_metric_length * 2 > 35:
-        #     zoom = 0.325
-        # if max_metric_length * 2 >= 40:
-        #     zoom = 0.315
-
+        
         if compare == 'Yes': add_image(ax, visual_file_name, xy=(0.715, .25), zoom=zoom)
         if compare == 'No': add_image(ax, visual_file_name, xy=(0.715, .275), zoom=zoom)
 
