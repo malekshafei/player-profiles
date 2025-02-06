@@ -1570,7 +1570,8 @@ if start_graphic:
         width, height = img.size 
         #print(img.size)
         cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
-        visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        #visual_file_name = "os.path.join(output_dir, f"ShotMap.png")
+        visual_file_name = 'saved_images/ShotMap.png'
         cropped_img.save(visual_file_name)
 
 
@@ -1678,7 +1679,8 @@ if start_graphic:
         #print(img.size)
         #cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
         cropped_img = img.crop((30, 50, 760, 470)) #(left, upper, right, lower)
-        visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        visual_file_name = 'saved_images/ShotMap.png'
         cropped_img.save(visual_file_name)
 
 
@@ -1784,7 +1786,8 @@ if start_graphic:
         #print(img.size)
         #cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
         cropped_img = img.crop((150, 30, 760, 530)) #(left, upper, right, lower)
-        visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        visual_file_name = 'saved_images/ShotMap.png'
         cropped_img.save(visual_file_name)
 
 
@@ -1879,7 +1882,8 @@ if start_graphic:
         #print(img.size)
         #cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
         cropped_img = img.crop((150, 30, 760, 530)) #(left, upper, right, lower)
-        visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        visual_file_name = 'saved_images/ShotMap.png'
         cropped_img.save(visual_file_name)
 
 
@@ -1932,7 +1936,8 @@ if start_graphic:
         
         cropped_img = img.crop((10, 10, 1125, 770)) #(left, upper, right, lower)
         #cropped_img = img.crop((147, 20, 760, 550)) #(left, upper, right, lower)
-        visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        visual_file_name = 'saved_images/ShotMap.png'
         #img.save(visual_file_name)
         cropped_img.save(visual_file_name)
 
@@ -1992,7 +1997,8 @@ if start_graphic:
         
         cropped_img = img.crop((10, 10, 1125, 770)) #(left, upper, right, lower)
         #cropped_img = img.crop((147, 20, 760, 550)) #(left, upper, right, lower)
-        visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        visual_file_name = 'saved_images/ShotMap.png'
         #img.save(visual_file_name)
         cropped_img.save(visual_file_name)
 
@@ -2141,12 +2147,13 @@ if start_graphic:
         width, height = img.size 
         #print(img.size)
         
-        output_dir = './saved_images'  # Save it inside your Streamlit app folder
-        os.makedirs(output_dir, exist_ok=True)
+         # Save it inside your Streamlit app folder
+        #os.makedirs(output_dir, exist_ok=True)
 
         cropped_img = img#img.crop((10, 10, 1125, 770)) #(left, upper, right, lower)
         #cropped_img = img.crop((147, 20, 760, 550)) #(left, upper, right, lower)
-        visual_file_name = visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
+        visual_file_name = 'saved_images/ShotMap.png'
 
         #f"/Users/malekshafei/Documents/ShotMap.png"
         #img.save(visual_file_name)
