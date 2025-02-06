@@ -1,0 +1,11 @@
+matplotlib
+Pillow
+openpyxl
+statsbombpy
+mplsoccer
+streamlit
+pandas
+numpy
+streamlit
+datetime
+re
