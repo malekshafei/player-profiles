@@ -1061,8 +1061,8 @@ if start_graphic:
    
 
 
-    #club_image_path = f"/Users/malekshafei/Desktop/Louisville/Club Logos/{team_name}.png"
-    club_image_path = f"Club Logos/{team_name}.png"
+    #club_image_path = f"/Users/malekshafei/Desktop/Louisville/Club Logos/{team_name}.webp"
+    club_image_path = f"Club Logos/{team_name}.webp"
     with Image.open(club_image_path) as img:
         width, height = img.size
         #print(width,height)
@@ -1088,7 +1088,7 @@ if start_graphic:
         img = Image.open(image_path)
         
         # Convert PIL image to NumPy array (Matplotlib expects this format)
-        img_array = np.array(img)
+        img_array = np.array(img) 
 
         # Create OffsetImage with the image array
         imagebox = OffsetImage(img_array, zoom=zoom)
@@ -1100,8 +1100,8 @@ if start_graphic:
     if league in ['England', 'France']: add_image(ax, club_image_path, xy=(0.837, .972), zoom=0.05 * width_factor)
     else: add_image(ax, club_image_path, xy=(0.825, .972), zoom=0.05 * width_factor)
 
-    #league_image_path = f"/Users/malekshafei/Desktop/Louisville/League Logos/{league}.png"
-    league_image_path = f"League Logos/{league}.png"
+    #league_image_path = f"/Users/malekshafei/Desktop/Louisville/League Logos/{league}.webp"
+    league_image_path = f"League Logos/{league}.webp"
     with Image.open(league_image_path) as img:
         width, height = img.size
         #print("wayy",width,height)
@@ -1402,15 +1402,15 @@ if start_graphic:
         ##
         tt = row['Team']
 
-        #club_path = f"/Users/malekshafei/Desktop/Louisville/Club Logos/{tt}.png"
-        club_path = f"Club Logos/{tt}.png"
+        #club_path = f"/Users/malekshafei/Desktop/Louisville/Club Logos/{tt}.webp"
+        club_path = f"Club Logos/{tt}.webp"
         with Image.open(club_path) as img:
             width, height = img.size
             #print(width,height)
             width_factor = 1200/width
             
         
-        #league_image_path = "/Users/malekshafei/Downloads/USL Logo.png" 
+        #league_image_path = "/Users/malekshafei/Downloads/USL Logo.webp" 
 
         ##
         add_image(ax, club_path, xy=(0.115, start_y-0.005), zoom=0.019 * width_factor)
@@ -1612,8 +1612,8 @@ if start_graphic:
         width, height = img.size 
         #print(img.size)
         cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
-        #visual_file_name = "os.path.join(output_dir, f"ShotMap.png")
-        visual_file_name = 'saved_images/ShotMap.png'
+        #visual_file_name = "os.path.join(output_dir, f"ShotMap.webp")
+        visual_file_name = 'saved_images/ShotMap.webp'
         cropped_img.save(visual_file_name)
 
 
@@ -1721,8 +1721,8 @@ if start_graphic:
         #print(img.size)
         #cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
         cropped_img = img.crop((30, 50, 760, 470)) #(left, upper, right, lower)
-        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
-        visual_file_name = 'saved_images/ShotMap.png'
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.webp")
+        visual_file_name = 'saved_images/ShotMap.webp'
         cropped_img.save(visual_file_name)
 
 
@@ -1828,8 +1828,8 @@ if start_graphic:
         #print(img.size)
         #cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
         cropped_img = img.crop((150, 30, 760, 530)) #(left, upper, right, lower)
-        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
-        visual_file_name = 'saved_images/ShotMap.png'
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.webp")
+        visual_file_name = 'saved_images/ShotMap.webp'
         cropped_img.save(visual_file_name)
 
 
@@ -1924,8 +1924,8 @@ if start_graphic:
         #print(img.size)
         #cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
         cropped_img = img.crop((150, 30, 760, 530)) #(left, upper, right, lower)
-        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
-        visual_file_name = 'saved_images/ShotMap.png'
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.webp")
+        visual_file_name = 'saved_images/ShotMap.webp'
         cropped_img.save(visual_file_name)
 
 
@@ -1978,8 +1978,8 @@ if start_graphic:
         
         cropped_img = img.crop((10, 10, 1125, 770)) #(left, upper, right, lower)
         #cropped_img = img.crop((147, 20, 760, 550)) #(left, upper, right, lower)
-        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
-        visual_file_name = 'saved_images/ShotMap.png'
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.webp")
+        visual_file_name = 'saved_images/ShotMap.webp'
         #img.save(visual_file_name)
         cropped_img.save(visual_file_name)
 
@@ -2039,8 +2039,8 @@ if start_graphic:
         
         cropped_img = img.crop((10, 10, 1125, 770)) #(left, upper, right, lower)
         #cropped_img = img.crop((147, 20, 760, 550)) #(left, upper, right, lower)
-        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
-        visual_file_name = 'saved_images/ShotMap.png'
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.webp")
+        visual_file_name = 'saved_images/ShotMap.webp'
         #img.save(visual_file_name)
         cropped_img.save(visual_file_name)
 
@@ -2194,10 +2194,10 @@ if start_graphic:
 
         cropped_img = img#img.crop((10, 10, 1125, 770)) #(left, upper, right, lower)
         #cropped_img = img.crop((147, 20, 760, 550)) #(left, upper, right, lower)
-        #visual_file_name = os.path.join(output_dir, f"ShotMap.png")
-        visual_file_name = 'saved_images/ShotMap.png'
+        #visual_file_name = os.path.join(output_dir, f"ShotMap.webp")
+        visual_file_name = 'saved_images/ShotMap.webp'
 
-        #f"/Users/malekshafei/Documents/ShotMap.png"
+        #f"/Users/malekshafei/Documents/ShotMap.webp"
         #img.save(visual_file_name)
         cropped_img.save(visual_file_name)
         
