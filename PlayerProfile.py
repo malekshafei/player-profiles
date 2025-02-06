@@ -544,7 +544,11 @@ with st.sidebar:
         # data1 = data1[data1['Season'].isin(seasons)]
 
         position_minutes = player_data.groupby('Position Group')['Minutes'].sum().to_dict()
-        position_labels = [f"{position} ({position_minutes[position]} mins)" for position in sorted(player_data['Position Group'].unique())]
+        #position_labels = [f"{position} ({position_minutes[position]} mins)" for position in sorted(player_data['Position Group'].unique())]
+        position_labels = [
+                f"{position} ({position_minutes[position]} mins)" 
+                for position in sorted(player_data['Position Group'].unique(), key=lambda pos: position_minutes[pos], reverse=True)
+        ]
 
 
 
