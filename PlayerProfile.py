@@ -7,7 +7,7 @@ from mplsoccer import Pitch, VerticalPitch, FontManager
 from statsbombpy import sb
 import plotly.express as px
 import plotly.graph_objects as go
-from streamlit_plotly_events import plotly_events
+# from streamlit_plotly_events import plotly_events
 from PIL import Image
 
 import matplotlib.image as mpimg
