@@ -851,20 +851,22 @@ with st.sidebar:
 
                 all_options = all_ratings + all_metrics
 
-                col1, col2, col3 = st.columns([0.87,1.1,0.56])
+                
                 if compare == 'Yes':
-                    with col1: league2 = st.selectbox('Comp',league_list, index = league_index)
+                    print('')
+                    col1, col2 = st.columns([2,0.6])
+                    with col1: league2 = st.selectbox('Competition',league_list, index = league_index)
                     data_copy = data_copy[(data_copy['Competition'] == league2) & (data_copy['Position Group'].isin(positions))].sort_values(by = 'Player')
-                    with col2: comp_player = st.selectbox('Player', data_copy[data_copy['Player'] != player]['Player'].unique())
+                    col1, col2 = st.columns([2,0.6])
+                    with col1: comp_player = st.selectbox('Player', data_copy[data_copy['Player'] != player]['Player'].unique())
                     season_options2 = sorted(data_copy[data_copy['Player'] == comp_player]['Season'].unique())
-                    with col3: seasons2 = st.pills('Season', season_options2, selection_mode='multi', default = season_options2[-1], key = 'season2',)
+                    with col2: seasons2 = st.pills('Season', season_options2, selection_mode='multi', default = season_options2[-1], key = 'season2')
 
 
                     data_copy = data_copy[data_copy['Player'] == comp_player]
 
                     player_id2 = data_copy.iloc[0]['offline_player_id']
-                    mapped_seasons2 = list(map(lambda x: season_mapping.get(x, x), seasons))
-
+                    mapped_seasons2 = list(map(lambda x: season_mapping.get(x, x), seasons2))
                     player_data2 = pd.DataFrame()
                     comp_data2 = pd.DataFrame()
 
@@ -874,14 +876,18 @@ with st.sidebar:
                             
                             #print(max_poss_matches)
                             s_filename2 = f"{league2}{s2}-AppPlayerSeasonPercentiles.parquet"
-                            #print(s_filename2)
+                            print(s_filename2)
                             sdata2 = pd.read_parquet(s_filename2)
                             sdata2['Season'] = s2
                             scomp_data2 = sdata2.copy(deep=True)
-                            #sdata = sdata[sdata['Player'] == player]
-                            sdata2 = sdata2[sdata2['player_id'] == player_id2]
+                            sdata2 = sdata2[sdata2['Player'] == comp_player]
+                            #sdata2 = sdata2[sdata2['player_id'] == player_id2]
                             player_data2 = pd.concat([player_data2, sdata2])
                             comp_data2 = pd.concat([comp_data2, scomp_data2])
+
+                    #print(sorted(comp_data2['Player'].unique()))
+                    #print(comp_data2[comp_data2['Team'] == 'Orlando Pride'][['Player', 'player_id']])
+                    
 
                     
                     
@@ -921,15 +927,15 @@ with st.sidebar:
                             comp_data2[col] = comp_data2[col] * comp_data2['Minutes']
 
 
-                    
-                    
+                    #print(player_id2)
+                    #print(comp_data2[comp_data2[['player_id'] == player_id2]][['Player', 'Minutes']])
                     comp_data2 = comp_data2.groupby('Player').agg(aggs).reset_index()
 
                     for col in raw_cols:
                         if col not in special_cols:
                             comp_data2[col] = comp_data2[col] / comp_data2['Minutes']
                             comp_data2[f'pct{col}'] = round(comp_data2[col].rank(pct=True) * 100,2)
-
+                    #print(comp_data2[comp_data2[['player_id'] == player_id2]][['Player', 'Minutes']])
                     mins2 = comp_data2.loc[comp_data2['player_id'] == player_id2,'Minutes'].values[0]
                     #print(mins2)
 
