@@ -31,7 +31,6 @@ from matplotlib import rcParams
 #from matplotlib.font_manager import fontManager, FontProperties
 import matplotlib.font_manager as fm
 
-# font_path = '/Users/malekshafei/Downloads/Sen/static/Sen-Regular.ttf'
 # fontManager.addfont(font_path)
 # sen_font = FontProperties(fname=font_path).get_name()
 # rcParams['font.family'] = sen_font
@@ -50,8 +49,8 @@ st.set_page_config(
 
 
 import os
-regular_font_path = '/Users/malekshafei/Downloads/Montserrat/static/Montserrat-Regular.ttf'
-bold_font_path = '/Users/malekshafei/Downloads/Montserrat/static/Montserrat-Bold.ttf'
+regular_font_path = 'Montserrat-Regular.ttf'
+bold_font_path = 'Montserrat-Bold.ttf'
 
 
 bold = fm.FontProperties(fname=bold_font_path)
@@ -99,7 +98,6 @@ pos_list = ['CBs', 'WBs', 'CMs', 'AMs', 'Ws', 'STs', 'GKs']
 league_list = ['NWSL', 'USL', 'England', 'Spain', 'Germany', 'France', 'Sweden', 'Brazil', 'Mexico', 'MLS', 'MLS Next Pro']
  
 
-# image_path = '/Users/malekshafei/Downloads/IMG_9160.png'
 # img = Image.open(image_path)
 
 
@@ -587,7 +585,8 @@ with st.sidebar:
 
             max_mapped_season = max(mapped_seasons)
 
-            player_map_file = f'/Users/malekshafei/Desktop/Louisville/Player Mapping/player-mapping{league}{max_mapped_season}.json'
+            #player_map_file = f'/Users/malekshafei/Desktop/Louisville/Player Mapping/player-mapping{league}{max_mapped_season}.json'
+            player_map_file = f'Player Mapping/player-mapping{league}{max_mapped_season}.json'
             player_mapping = pd.read_json(player_map_file)
             #print(player_mapping)
 
@@ -1029,8 +1028,8 @@ if start_graphic:
    
 
 
-    #club_image_path = "/Users/malekshafei/Downloads/Louisville_City_FC_2020_logo_primary.svg.png"
-    club_image_path = f"/Users/malekshafei/Desktop/Louisville/Club Logos/{team_name}.png"
+    #club_image_path = f"/Users/malekshafei/Desktop/Louisville/Club Logos/{team_name}.png"
+    club_image_path = f"Club Logos/{team_name}.png"
     with Image.open(club_image_path) as img:
         width, height = img.size
         #print(width,height)
@@ -1052,7 +1051,8 @@ if start_graphic:
     if league in ['England', 'France']: add_image(ax, club_image_path, xy=(0.837, .972), zoom=0.05 * width_factor)
     else: add_image(ax, club_image_path, xy=(0.825, .972), zoom=0.05 * width_factor)
 
-    league_image_path = f"/Users/malekshafei/Desktop/Louisville/League Logos/{league}.png"
+    #league_image_path = f"/Users/malekshafei/Desktop/Louisville/League Logos/{league}.png"
+    league_image_path = f"League Logos/{league}.png"
     with Image.open(league_image_path) as img:
         width, height = img.size
         #print("wayy",width,height)
@@ -1353,14 +1353,15 @@ if start_graphic:
         ##
         tt = row['Team']
 
-        club_path = f"/Users/malekshafei/Desktop/Louisville/Club Logos/{tt}.png"
+        #club_path = f"/Users/malekshafei/Desktop/Louisville/Club Logos/{tt}.png"
+        club_path = f"Club Logos/{tt}.png"
         with Image.open(club_path) as img:
             width, height = img.size
             #print(width,height)
             width_factor = 1200/width
             
         
-        league_image_path = "/Users/malekshafei/Downloads/USL Logo.png" 
+        #league_image_path = "/Users/malekshafei/Downloads/USL Logo.png" 
 
         ##
         add_image(ax, club_path, xy=(0.115, start_y-0.005), zoom=0.019 * width_factor)
