@@ -18,6 +18,7 @@ print('new run')
 print('')
 creds = {"user": "rdell@racingloufc.com", "passwd": "8CStqFOa"}
 
+import gc
 
 from PIL import Image, ImageOps
 import io
@@ -26,6 +27,10 @@ warnings.filterwarnings('ignore')
 from datetime import datetime, timedelta
 
 from matplotlib import rcParams
+
+import psutil
+
+# Display in Streamlit
 
     
 #from matplotlib.font_manager import fontManager, FontProperties
@@ -51,6 +56,11 @@ st.set_page_config(
 import os
 regular_font_path = 'Montserrat-Regular.ttf'
 bold_font_path = 'Montserrat-Bold.ttf'
+
+process = psutil.Process(os.getpid())
+cpu_usage = psutil.cpu_percent(interval=1)  # Get CPU percentage
+memory_usage = process.memory_info().rss / (1024 * 1024)  # Convert to MB
+disk_usage = psutil.disk_usage('/').used / (1024**3)  # Convert to GB
 
 
 bold = fm.FontProperties(fname=bold_font_path)
@@ -448,9 +458,20 @@ season_mapping = {
 poss_seasons = ['2021','2022','2023','2024','2025','20/21','21/22','22/23','23/24','24/25']
 
 
+
 file_name = 'CombinedAppData.parquet'
 
-data1 = pd.read_parquet(file_name)
+import pandas as pd
+import streamlit as st
+
+@st.cache_data
+def load_data():
+    return pd.read_parquet(file_name)
+
+data1 = load_data()  # Cached, so it doesn’t reload every time
+
+
+#data1 = pd.read_parquet(file_name)
 data_copy = data1.copy(deep=True)
 
 #data1['file_season'] = data1['Season'].apply(lambda x: season_mapping.get(x, x))
@@ -475,6 +496,7 @@ with st.sidebar:
 
 
     player_id = data1.iloc[0]['offline_player_id']
+    del data1
     
 
     seasons = st.pills("Select Seasons", season_options, selection_mode = "multi", default = season_options[-1])
@@ -1050,14 +1072,30 @@ if start_graphic:
             width_factor = 1200/width
         
     
+    from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+    from PIL import Image
  
- 
-    def add_image(ax, image_path, xy, zoom=0.2):
+    # def add_image(ax, image_path, xy, zoom=0.2):
     
-        img = mpimg.imread(image_path)  # Load image
-        imagebox = OffsetImage(img, zoom=zoom)  # Set resize factor
-        ab = AnnotationBbox(imagebox, xy, xycoords="data", frameon=False)  # Keep fixed in data coordinates
-        ax.add_artist(ab)  # Add image without modifying axis settings
+    #     img = mpimg.imread(image_path)  # Load image
+    #     imagebox = OffsetImage(img, zoom=zoom)  # Set resize factor
+    #     ab = AnnotationBbox(imagebox, xy, xycoords="data", frameon=False)  # Keep fixed in data coordinates
+    #     ax.add_artist(ab)  # Add image without modifying axis settings
+
+
+    def add_image(ax, image_path, xy, zoom=0.2):
+        # Open image with PIL (supports .webp and all formats)
+        img = Image.open(image_path)
+        
+        # Convert PIL image to NumPy array (Matplotlib expects this format)
+        img_array = np.array(img)
+
+        # Create OffsetImage with the image array
+        imagebox = OffsetImage(img_array, zoom=zoom)
+        
+        # Attach the image to the given coordinates
+        ab = AnnotationBbox(imagebox, xy, xycoords="data", frameon=False)
+        ax.add_artist(ab)  # Add image to plot
     
     if league in ['England', 'France']: add_image(ax, club_image_path, xy=(0.837, .972), zoom=0.05 * width_factor)
     else: add_image(ax, club_image_path, xy=(0.825, .972), zoom=0.05 * width_factor)
@@ -2181,6 +2219,8 @@ if start_graphic:
     add_basic_text(0.075, 0.84, 'Club', fontsize= 14.5, color = 'gray')
     add_basic_text(0.075, 0.822, team_name, fontsize= 14.5)
 
+  # Force memory cleanup
+
 
         
 
@@ -2192,47 +2232,14 @@ if start_graphic:
         # fig.set_facecolor('#400179')
 
 
-
-
-
-    
-
-
-
-
-        
-
-
-
-
-
-
-            
-
-    
-
-    
-    
-    
-
-    
-    #print("")
-    
-        
-
-
-
-
-    #add_basic_text(0.0, 0.9, 'Strengths', fontsize= 9, color = 'gray')
-
-
-   
-
-
-
-
-
-    #ax.text(0, 100, player)
-
     st.pyplot(fig)
 
+
+# Display in Streamlit
+st.sidebar.header("Resource Usage")
+st.sidebar.write(f"**CPU Usage:** {cpu_usage:.2f}%")
+st.sidebar.write(f"**Memory Usage:** {memory_usage:.2f} MB")
+st.sidebar.write(f"**Disk Usage:** {disk_usage:.2f} GB")
+
+
+gc.collect()
