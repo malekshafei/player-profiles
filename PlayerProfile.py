@@ -123,6 +123,8 @@ league_list = ['NWSL', 'USL', 'England', 'Spain', 'Germany', 'France', 'Sweden',
 # ax.axis("off")
 #st.pyplot(fig)
 
+gc.collect()
+
 raw_cols = ['Player',
  'pos_group',
  'Team',
@@ -464,7 +466,7 @@ file_name = 'CombinedAppData.parquet'
 import pandas as pd
 import streamlit as st
 
-@st.cache_data
+#@st.cache_data
 def load_data():
     return pd.read_parquet(file_name)
 
@@ -1033,10 +1035,15 @@ with st.sidebar:
             
         
 
+def log_memory_usage(stage):
+    process = psutil.Process(os.getpid())
+    mem_usage = process.memory_info().rss / (1024 * 1024)  # Convert to MB
+    print(f"[{stage}] Memory Usage: {mem_usage:.2f} MB")
 
+log_memory_usage("Start") 
             
-output_dir = './saved_images'  # Save it inside your Streamlit app folder
-os.makedirs(output_dir, exist_ok=True)
+# output_dir = './saved_images'  # Save it inside your Streamlit app folder
+# os.makedirs(output_dir, exist_ok=True)
 
 
 
@@ -1455,7 +1462,7 @@ if start_graphic:
         )
     ax.add_patch(rect1)
 
-
+    log_memory_usage("After Left") 
     
     #selected_metrics
     def plot_progress_bar(ax, percentage, x, y, width, height = 0.05):
@@ -1537,6 +1544,8 @@ if start_graphic:
         alpha=0.25  # Optional: Transparency
         )
     ax.add_patch(rect1)
+
+    log_memory_usage("After Right 1") 
 
    
     if selected_card == 'Shot Map':
@@ -1640,6 +1649,8 @@ if start_graphic:
         add_basic_text(0.51, 0.031, f'Goal', fontsize= 14, ha = 'left')
         add_basic_text(0.62, 0.031, f'Saved', fontsize= 14, ha = 'left')
         add_basic_text(0.735, 0.031, f'Off Target / Blocked', fontsize= 14, ha = 'left')
+
+        log_memory_usage("After Shot") 
 
     if selected_card == 'Key Passes':
 
@@ -1751,6 +1762,8 @@ if start_graphic:
         # add_basic_text(0.62, 0.031, f'Shot Assist', fontsize= 14, ha = 'left')
         #add_basic_text(0.735, 0.031, f'Off Target / Blocked', fontsize= 14, ha = 'left')
 
+        log_memory_usage("After KP") 
+
 
     if selected_card == 'Ball Carrying':
 
@@ -1855,6 +1868,8 @@ if start_graphic:
         #add_image(ax, visual_file_name, xy=(0.715, .17), zoom=0.7285)
         add_image(ax, cropped_img, xy=(0.715, .2), zoom=0.6285)
 
+        log_memory_usage("After Drib") 
+
     if selected_card == 'Progressive Actions':
 
         rect1 = patches.Rectangle( 
@@ -1951,6 +1966,8 @@ if start_graphic:
         #add_image(ax, visual_file_name, xy=(0.715, .17), zoom=0.7285)
         add_image(ax, cropped_img, xy=(0.715, .2), zoom=0.6285)
 
+        log_memory_usage("After Prog") 
+
     if selected_card == 'Touch Map':
 
         rect1 = patches.Rectangle( 
@@ -2009,6 +2026,8 @@ if start_graphic:
         # add_basic_text(0.62, 0.031, f'Shot Assist', fontsize= 14, ha = 'left')
         #add_basic_text(0.735, 0.031, f'Off Target / Blocked', fontsize= 14, ha = 'left')
 
+        log_memory_usage("After Touch") 
+
     if selected_card == 'Pressure Map':
 
         rect1 = patches.Rectangle( 
@@ -2047,8 +2066,8 @@ if start_graphic:
         width, height = img.size 
         #print(img.size)
 
-        output_dir = './saved_images'  # Save it inside your Streamlit app folder
-        os.makedirs(output_dir, exist_ok=True)
+        # output_dir = './saved_images'  # Save it inside your Streamlit app folder
+        # os.makedirs(output_dir, exist_ok=True)
         
         cropped_img = img.crop((10, 10, 1125, 770)) #(left, upper, right, lower)
         #cropped_img = img.crop((147, 20, 760, 550)) #(left, upper, right, lower)
@@ -2069,6 +2088,8 @@ if start_graphic:
         # add_basic_text(0.51, 0.081, f'Goal Assist', fontsize= 14, ha = 'left')
         # add_basic_text(0.62, 0.031, f'Shot Assist', fontsize= 14, ha = 'left')
         #add_basic_text(0.735, 0.031, f'Off Target / Blocked', fontsize= 14, ha = 'left')
+
+        log_memory_usage("After Pressure") 
 
 
     if selected_card == 'Radar':
@@ -2230,6 +2251,8 @@ if start_graphic:
         if compare == 'Yes': add_image(ax, cropped_img, xy=(0.715, .25), zoom=zoom)
         if compare == 'No': add_image(ax, cropped_img, xy=(0.715, .275), zoom=zoom)
 
+        log_memory_usage("After Radar") 
+
 
     comp_data['Team'] = comp_data['Team'].apply(lambda x: replace_team_names(x, team_replacements))
     #print(comp_data.loc[comp_data['player_id'] == player_id, 'Team'])
@@ -2255,12 +2278,15 @@ if start_graphic:
 
     st.pyplot(fig)
 
+    log_memory_usage("After Final") 
 
+gc.collect()
 # Display in Streamlit
 st.sidebar.header("Resource Usage")
 st.sidebar.write(f"**CPU Usage:** {cpu_usage:.2f}%")
 st.sidebar.write(f"**Memory Usage:** {memory_usage:.2f} MB")
 st.sidebar.write(f"**Disk Usage:** {disk_usage:.2f} GB")
 
+log_memory_usage("After Everything") 
 
-gc.collect()
+
