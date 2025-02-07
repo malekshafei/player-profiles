@@ -1,3 +1,22 @@
+
+import gc
+
+# # Get a list of all global variables
+# globals_list = list(globals().keys())
+
+
+# # Display in Streamlit
+
+# # Delete everything except built-in variables
+# for name in globals_list:
+#     if name[0] != "_" and name not in ['st','gc', 'memory_usage']:  # Avoid deleting built-in variables
+#         #print(name)
+#         del globals()[name]
+import time
+import os
+
+
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -12,6 +31,7 @@ from PIL import Image
 
 import matplotlib.image as mpimg
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+
 
 print('')
 print('new run')
@@ -2300,26 +2320,24 @@ del player_map_file
 #     gc.collect()
 #     log_memory_usage("After Everything") 
 
-#import gc
 
-# Get a list of all global variables
-globals_list = list(globals().keys())
-
-
-# Display in Streamlit
-
-# Delete everything except built-in variables
-for name in globals_list:
-    if name[0] != "_" and name not in ['st','gc', 'memory_usage']:  # Avoid deleting built-in variables
-        #print(name)
-        del globals()[name]
 
 import gc
 gc.collect()
 st.sidebar.header("Resource Usage")
 # st.sidebar.write(f"**CPU Usage:** {cpu_usage:.2f}%")
+st.cache_data.clear()
 st.sidebar.write(f"**Memory Usage:** {memory_usage:.2f} MB")
 
+
+if st.button("Hard Reset"):
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
+    st.cache_data.clear()
+    
+    st.cache_resource.clear()
+    gc.collect()
+    st.rerun()
     
 # st.sidebar.write(f"**Disk Usage:** {disk_usage:.2f} GB")
 
