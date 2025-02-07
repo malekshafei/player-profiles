@@ -1082,8 +1082,7 @@ if start_graphic:
     #     ab = AnnotationBbox(imagebox, xy, xycoords="data", frameon=False)  # Keep fixed in data coordinates
     #     ax.add_artist(ab)  # Add image without modifying axis settings
 
-
-    def add_image(ax, image_path, xy, zoom=0.2):
+    def add_real_image(ax, image_path, xy, zoom=0.2):
         # Open image with PIL (supports .webp and all formats)
         img = Image.open(image_path)
         
@@ -1096,9 +1095,23 @@ if start_graphic:
         # Attach the image to the given coordinates
         ab = AnnotationBbox(imagebox, xy, xycoords="data", frameon=False)
         ax.add_artist(ab)  # Add image to plot
+
+    def add_image(ax, img, xy, zoom=0.2):
+        # Open image with PIL (supports .webp and all formats)
+        #img = Image.open(image_path)
+        
+        # Convert PIL image to NumPy array (Matplotlib expects this format)
+        img_array = np.array(img) 
+
+        # Create OffsetImage with the image array
+        imagebox = OffsetImage(img_array, zoom=zoom)
+        
+        # Attach the image to the given coordinates
+        ab = AnnotationBbox(imagebox, xy, xycoords="data", frameon=False)
+        ax.add_artist(ab)  # Add image to plot
     
-    if league in ['England', 'France']: add_image(ax, club_image_path, xy=(0.837, .972), zoom=0.05 * width_factor)
-    else: add_image(ax, club_image_path, xy=(0.825, .972), zoom=0.05 * width_factor)
+    if league in ['England', 'France']: add_real_image(ax, club_image_path, xy=(0.837, .972), zoom=0.05 * width_factor)
+    else: add_real_image(ax, club_image_path, xy=(0.825, .972), zoom=0.05 * width_factor) 
 
     #league_image_path = f"/Users/malekshafei/Desktop/Louisville/League Logos/{league}.webp"
     league_image_path = f"League Logos/{league}.webp"
@@ -1109,7 +1122,7 @@ if start_graphic:
             width_factor = (400/width) * 0.65
         else:
             width_factor = 320/width
-    add_image(ax, league_image_path, xy=(0.95, .972), zoom=0.25 * width_factor)
+    add_real_image(ax, league_image_path, xy=(0.95, .972), zoom=0.25 * width_factor)
 
     name_size = 50
     if len(player_nickname) > 15: name_size = 45
@@ -1413,7 +1426,7 @@ if start_graphic:
         #league_image_path = "/Users/malekshafei/Downloads/USL Logo.webp" 
 
         ##
-        add_image(ax, club_path, xy=(0.115, start_y-0.005), zoom=0.019 * width_factor)
+        add_real_image(ax, club_path, xy=(0.115, start_y-0.005), zoom=0.019 * width_factor)
 
         name1, name2 = split_name(row['Player'])
         if name1 == '':
@@ -1614,7 +1627,7 @@ if start_graphic:
         cropped_img = img.crop((130, 50, 660, 400)) #(left, upper, right, lower)
         #visual_file_name = "os.path.join(output_dir, f"ShotMap.webp")
         visual_file_name = 'saved_images/ShotMap.webp'
-        cropped_img.save(visual_file_name)
+        #cropped_img.save(visual_file_name)
 
 
         
@@ -1623,7 +1636,7 @@ if start_graphic:
 
 
 
-        add_image(ax, visual_file_name, xy=(0.715, .17), zoom=0.7285)
+        add_image(ax, cropped_img, xy=(0.715, .17), zoom=0.7285)
         add_basic_text(0.51, 0.031, f'Goal', fontsize= 14, ha = 'left')
         add_basic_text(0.62, 0.031, f'Saved', fontsize= 14, ha = 'left')
         add_basic_text(0.735, 0.031, f'Off Target / Blocked', fontsize= 14, ha = 'left')
@@ -1723,17 +1736,17 @@ if start_graphic:
         cropped_img = img.crop((30, 50, 760, 470)) #(left, upper, right, lower)
         #visual_file_name = os.path.join(output_dir, f"ShotMap.webp")
         visual_file_name = 'saved_images/ShotMap.webp'
-        cropped_img.save(visual_file_name)
+        #cropped_img.save(visual_file_name)
 
 
         
         #fig2.savefig(visual_file_name)
-        plt.close(fig2)
+        plt.close(fig2) 
 
 
 
         #add_image(ax, visual_file_name, xy=(0.715, .17), zoom=0.7285)
-        add_image(ax, visual_file_name, xy=(0.715, .2), zoom=0.5285)
+        add_image(ax, cropped_img, xy=(0.715, .2), zoom=0.5285)
         # add_basic_text(0.51, 0.081, f'Goal Assist', fontsize= 14, ha = 'left')
         # add_basic_text(0.62, 0.031, f'Shot Assist', fontsize= 14, ha = 'left')
         #add_basic_text(0.735, 0.031, f'Off Target / Blocked', fontsize= 14, ha = 'left')
@@ -1830,7 +1843,7 @@ if start_graphic:
         cropped_img = img.crop((150, 30, 760, 530)) #(left, upper, right, lower)
         #visual_file_name = os.path.join(output_dir, f"ShotMap.webp")
         visual_file_name = 'saved_images/ShotMap.webp'
-        cropped_img.save(visual_file_name)
+        #cropped_img.save(visual_file_name)
 
 
         
@@ -1840,7 +1853,7 @@ if start_graphic:
 
 
         #add_image(ax, visual_file_name, xy=(0.715, .17), zoom=0.7285)
-        add_image(ax, visual_file_name, xy=(0.715, .2), zoom=0.6285)
+        add_image(ax, cropped_img, xy=(0.715, .2), zoom=0.6285)
 
     if selected_card == 'Progressive Actions':
 
@@ -1926,7 +1939,7 @@ if start_graphic:
         cropped_img = img.crop((150, 30, 760, 530)) #(left, upper, right, lower)
         #visual_file_name = os.path.join(output_dir, f"ShotMap.webp")
         visual_file_name = 'saved_images/ShotMap.webp'
-        cropped_img.save(visual_file_name)
+        #cropped_img.save(visual_file_name)
 
 
         
@@ -1936,7 +1949,7 @@ if start_graphic:
 
 
         #add_image(ax, visual_file_name, xy=(0.715, .17), zoom=0.7285)
-        add_image(ax, visual_file_name, xy=(0.715, .2), zoom=0.6285)
+        add_image(ax, cropped_img, xy=(0.715, .2), zoom=0.6285)
 
     if selected_card == 'Touch Map':
 
@@ -1981,7 +1994,7 @@ if start_graphic:
         #visual_file_name = os.path.join(output_dir, f"ShotMap.webp")
         visual_file_name = 'saved_images/ShotMap.webp'
         #img.save(visual_file_name)
-        cropped_img.save(visual_file_name)
+        #cropped_img.save(visual_file_name)
 
 
         
@@ -1991,7 +2004,7 @@ if start_graphic:
 
 
         
-        add_image(ax, visual_file_name, xy=(0.715, .285), zoom=0.345)
+        add_image(ax, cropped_img, xy=(0.715, .285), zoom=0.345)
         # add_basic_text(0.51, 0.081, f'Goal Assist', fontsize= 14, ha = 'left')
         # add_basic_text(0.62, 0.031, f'Shot Assist', fontsize= 14, ha = 'left')
         #add_basic_text(0.735, 0.031, f'Off Target / Blocked', fontsize= 14, ha = 'left')
@@ -2042,7 +2055,7 @@ if start_graphic:
         #visual_file_name = os.path.join(output_dir, f"ShotMap.webp")
         visual_file_name = 'saved_images/ShotMap.webp'
         #img.save(visual_file_name)
-        cropped_img.save(visual_file_name)
+        #cropped_img.save(visual_file_name)
 
 
         
@@ -2052,7 +2065,7 @@ if start_graphic:
 
 
         
-        add_image(ax, visual_file_name, xy=(0.715, .285), zoom=0.345)
+        add_image(ax, cropped_img, xy=(0.715, .285), zoom=0.345)
         # add_basic_text(0.51, 0.081, f'Goal Assist', fontsize= 14, ha = 'left')
         # add_basic_text(0.62, 0.031, f'Shot Assist', fontsize= 14, ha = 'left')
         #add_basic_text(0.735, 0.031, f'Off Target / Blocked', fontsize= 14, ha = 'left')
@@ -2181,6 +2194,12 @@ if start_graphic:
         #fig.subplots_adjust(left=0.25, right=0.75, top=0.75, bottom=0.25)
         fig2.subplots_adjust(left=0.1, right=0.9, top=0.85, bottom=0.15)
 
+
+
+    
+
+
+
         buf = io.BytesIO()
         fig2.savefig(buf, format='png', bbox_inches='tight')
         buf.seek(0)
@@ -2199,15 +2218,17 @@ if start_graphic:
 
         #f"/Users/malekshafei/Documents/ShotMap.webp"
         #img.save(visual_file_name)
-        cropped_img.save(visual_file_name)
+        #cropped_img.save(visual_file_name)
         
         #fig2.savefig(visual_file_name)
         plt.close(fig2)
 
         zoom = 0.37
         
-        if compare == 'Yes': add_image(ax, visual_file_name, xy=(0.715, .25), zoom=zoom)
-        if compare == 'No': add_image(ax, visual_file_name, xy=(0.715, .275), zoom=zoom)
+        # if compare == 'Yes': add_image(ax, visual_file_name, xy=(0.715, .25), zoom=zoom)
+        # if compare == 'No': add_image(ax, visual_file_name, xy=(0.715, .275), zoom=zoom)
+        if compare == 'Yes': add_image(ax, cropped_img, xy=(0.715, .25), zoom=zoom)
+        if compare == 'No': add_image(ax, cropped_img, xy=(0.715, .275), zoom=zoom)
 
 
     comp_data['Team'] = comp_data['Team'].apply(lambda x: replace_team_names(x, team_replacements))
