@@ -123,7 +123,7 @@ league_list = ['NWSL', 'USL', 'England', 'Spain', 'Germany', 'France', 'Sweden',
 # ax.axis("off")
 #st.pyplot(fig)
 
-gc.collect()
+#gc.collect()
 
 raw_cols = ['Player',
  'pos_group',
@@ -599,6 +599,8 @@ with st.sidebar:
             
 
             comp_data = pd.concat([comp_data, player_data])
+
+            events = events[events['Position Group'].isin(positions)]
             # comp_data['Team'] = comp_data['Team'].apply(lambda x: replace_team_names(x, team_replacements))
             # #print(comp_data.loc[comp_data['player_id'] == player_id, 'Team'])
             # team_name = comp_data.loc[comp_data['player_id'] == player_id, 'Team'].values[0]
@@ -709,7 +711,7 @@ with st.sidebar:
 
             
             #comp_data['GK_Difficulty_Faced_Raw'] = (0.3 * comp_data['pctGK Shots on Target Faced']) + (0.2 * comp_data['pctGK xG Against']) + (0.2 * comp_data['pctGK xGOT Against']) + (0.3 * comp_data['pctBig Chances Faced'])
-            comp_data['Shot Stopping'] = (0.05 * comp_data['pctGK Shots on Target Faced']) + (0.2 * comp_data['pctBig Chances Save %']) + (0.6 * comp_data['pctGoals Prevented']) + (0.15 * comp_data['pctGK Save %'])
+            comp_data['Shot Stopping'] = (0.05 * comp_data['pctGK Shots on Target Faced']) + (0.1 * comp_data['pctBig Chances Save %']) + (0.7 * comp_data['pctGoals Prevented']) + (0.15 * comp_data['pctGK Save %'])
             comp_data['Short Distribution'] = (0.15 * comp_data['pctForward Pass %']) + (0.2 * comp_data['pctPressured Pass %']) + (0.65 * comp_data['pctShort Pass %'])
             comp_data['Long Distribution'] = (0.2 * comp_data['pctProgressive Passes']) + (0.1 * comp_data['pctPasses into Final Third']) +  (0.35 * comp_data['pctLong Passes Completed']) + (0.1 * comp_data['pctPass OBV']) + (0.25 * comp_data['pctLong Pass %'])
             comp_data['Stepping Out'] = (0.1 * comp_data['pctGK Avg. Distance'])
@@ -2280,13 +2282,47 @@ if start_graphic:
 
     log_memory_usage("After Final") 
 
-gc.collect()
-# Display in Streamlit
-st.sidebar.header("Resource Usage")
-st.sidebar.write(f"**CPU Usage:** {cpu_usage:.2f}%")
-st.sidebar.write(f"**Memory Usage:** {memory_usage:.2f} MB")
-st.sidebar.write(f"**Disk Usage:** {disk_usage:.2f} GB")
+del events
+del comp_data
+del player_data
+if selected_card == 'Radar':
+   if compare == 'Yes': del player_data2
+del recent_player_data
+del player_map_file
 
-log_memory_usage("After Everything") 
+# if memory_usage > 1100:
+#     print('>1300')
+#     for key in list(st.session_state.keys()):
+#         print(key)
+#         del st.session_state[key]
+#     log_memory_usage("After Everything") 
+    
+#     gc.collect()
+#     log_memory_usage("After Everything") 
+
+#import gc
+
+# Get a list of all global variables
+globals_list = list(globals().keys())
+
+
+# Display in Streamlit
+
+# Delete everything except built-in variables
+for name in globals_list:
+    if name[0] != "_" and name not in ['st','gc', 'memory_usage']:  # Avoid deleting built-in variables
+        #print(name)
+        del globals()[name]
+
+import gc
+gc.collect()
+st.sidebar.header("Resource Usage")
+# st.sidebar.write(f"**CPU Usage:** {cpu_usage:.2f}%")
+st.sidebar.write(f"**Memory Usage:** {memory_usage:.2f} MB")
+
+    
+# st.sidebar.write(f"**Disk Usage:** {disk_usage:.2f} GB")
+
+#log_memory_usage("After Everything") 
 
 
