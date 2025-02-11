@@ -2209,7 +2209,7 @@ if start_graphic:
         ax2.plot(angles, [50] * len(angles), color='white', linewidth=0.7, linestyle='-')
         ax2.plot(angles, [25] * len(angles), color='white', linewidth=0.7, linestyle='-')
 
-        if compare == 'No':
+        if compare == 'No': 
             ax2.plot(angles, data1, color='green', linewidth=0.4, linestyle='-', marker='o', markersize=3)
             ax2.fill(angles, data1, color='green', alpha=0.95)
 
