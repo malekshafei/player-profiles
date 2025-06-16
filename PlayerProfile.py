@@ -259,13 +259,36 @@ raw_cols = ['Player',
  'Big Chances Faced',
  'Big Chances Saved',
  'Big Chances Save %',
- 'PSV-99',
- 'PSV-85',
+
  'Distance',
- 'HI Running Distance',
- 'Sprinting Distance',
- 'Count High Acceleration',
- 'Count High Deceleration']
+ 'Running Distance', 'HSR Distance', 'Count HSR',
+ 'Sprinting Distance', 'Sprint Count', 'HI Distance', 'HI Count',
+ 'Medium Accels', 'High Accels', 'Medium Decels', 'High Decels',
+ 'Walking to HSR Count', 'Walking to Sprint Count', 
+ 'Top Speed', 'Time to Sprint',
+ 'Time to HSR', 'Walking Distance', '% of Distance Walking',
+ '% of Distance HI', '% of Distance Sprinting']
+
+phys_pct_cols = [
+    'pctDistance',
+        'pctRunning Distance', 'pctHSR Distance',
+       'pctCount HSR', 'pctSprinting Distance', 'pctSprint Count',
+       'pctHI Distance', 'pctHI Count', 'pctMedium Accels', 'pctHigh Accels',
+       'pctMedium Decels', 'pctHigh Decels', 'pctWalking to HSR Count',
+       'pctWalking to Sprint Count', 'pctTop Speed',
+       'pctTime to Sprint', 'pctTime to HSR', 'pctWalking Distance',
+       'pct% of Distance Walking', 'pct% of Distance HI',
+       'pct% of Distance Sprinting', 'pct% of HI Distance Sprinting'
+]
+ 
+ 
+#  'PSV-99',
+#  'PSV-85',
+#  'Distance',
+#  'HI Running Distance',
+#  'Sprinting Distance',
+#  'Count High Acceleration',
+#  'Count High Deceleration']
 
 
 metric_replacements = {
@@ -278,8 +301,8 @@ metric_replacements = {
     'Attacking Half Pressure Regains': 'Pressure Regains',
     'Big Chance Conversion': 'Big Chance Conv.',
     'Big Chances Created': 'Chances Created',
-    'PSV-99': 'Top Speed',
-    'PSV-85': '2nd Top Speed',
+    # 'PSV-99': 'Top Speed',
+    # 'PSV-85': '2nd Top Speed',
     'GK Save %': 'Save %',
     'GK Avg. Distance': 'Avg. Def. Dist.',
     'GK Shots on Target Faced': 'Shots OT Faced',
@@ -301,8 +324,8 @@ metric_replacements = {
     'Attacking Third Interceptions': 'Att. 1/3 Ints',
     'Attacking Half Pressures': 'Att. 1/2 Pressures',
     'Attacking Half Counterpressures': 'Att. 1/2 Counterpressures',
-    'Count High Acceleration': 'High Accels',
-    'Count High Deceleration': 'High Decels'
+    # 'Count High Acceleration': 'High Accels',
+    # 'Count High Deceleration': 'High Decels'
 
     
 
@@ -658,20 +681,31 @@ with st.sidebar:
             comp_data.drop(['Tackle %'], axis = 1)
             comp_data['Tackle %'] = round(comp_data['Tackle to Dribbled Past Ratio'] / (comp_data['Tackle to Dribbled Past Ratio'] + 1) * 100, 1)
             comp_data.drop(['Tackle to Dribbled Past Ratio'], axis = 1)
-            
-
-
-            #comp_data['Distance'] = comp_data['Distance'].fillna(0).astype(int)
-            comp_data['PSV-99'] = comp_data['PSV-99'].fillna(comp_data.groupby('player_id')['PSV-99'].transform('mean'))
-            comp_data['PSV-85'] = comp_data['PSV-85'].fillna(comp_data.groupby('player_id')['PSV-85'].transform('mean'))
-            comp_data['Distance'] = comp_data['Distance'].fillna(comp_data.groupby('player_id')['Distance'].transform('mean'))
-            comp_data['HI Running Distance'] = comp_data['HI Running Distance'].fillna(comp_data.groupby('player_id')['HI Running Distance'].transform('mean'))
-            comp_data['Sprinting Distance'] = comp_data['Sprinting Distance'].fillna(comp_data.groupby('player_id')['Sprinting Distance'].transform('mean'))
-            comp_data['Count High Acceleration'] = comp_data['Count High Acceleration'].fillna(comp_data.groupby('player_id')['Count High Acceleration'].transform('mean'))
-            comp_data['Count High Deceleration'] = comp_data['Count High Deceleration'].fillna(comp_data.groupby('player_id')['Count High Deceleration'].transform('mean'))
 
             
             
+
+
+            # #comp_data['Distance'] = comp_data['Distance'].fillna(0).astype(int)
+            # comp_data['PSV-99'] = comp_data['PSV-99'].fillna(comp_data.groupby('player_id')['PSV-99'].transform('mean'))
+            # comp_data['PSV-85'] = comp_data['PSV-85'].fillna(comp_data.groupby('player_id')['PSV-85'].transform('mean'))
+            # comp_data['Distance'] = comp_data['Distance'].fillna(comp_data.groupby('player_id')['Distance'].transform('mean'))
+            # comp_data['HI Running Distance'] = comp_data['HI Running Distance'].fillna(comp_data.groupby('player_id')['HI Running Distance'].transform('mean'))
+            # comp_data['Sprinting Distance'] = comp_data['Sprinting Distance'].fillna(comp_data.groupby('player_id')['Sprinting Distance'].transform('mean'))
+            # comp_data['Count High Acceleration'] = comp_data['Count High Acceleration'].fillna(comp_data.groupby('player_id')['Count High Acceleration'].transform('mean'))
+            # comp_data['Count High Deceleration'] = comp_data['Count High Deceleration'].fillna(comp_data.groupby('player_id')['Count High Deceleration'].transform('mean'))
+
+            phys_cols = [
+                    'Distance','Running Distance', 'HSR Distance', 'Count HSR',
+                    'Sprinting Distance', 'Sprint Count', 'HI Distance', 'HI Count',
+                    'Medium Accels', 'High Accels', 'Medium Decels', 'High Decels',
+                    'Walking to HSR Count', 'Walking to Sprint Count', 
+                    'Top Speed', 'Time to Sprint',
+                    'Time to HSR', 'Walking Distance', '% of Distance Walking',
+                    '% of Distance HI', '% of Distance Sprinting']
+
+            for col in phys_cols:
+                comp_data[col] = comp_data[col].fillna(comp_data.groupby('player_id')[col].transform('mean'))
 
 
             card_options = ['Shot Map', 'Key Passes', 'Ball Carrying', 'Progressive Actions', 'Touch Map', 'Pressure Map', 'Radar']
@@ -686,17 +720,20 @@ with st.sidebar:
             special_cols = ['Player', 'pos_group', 'Team', 'Minutes', 'Number', 'Foot', 'player_id', 'Position', 'Detailed Position', 'Shortened Position','Season']
             ratio_cols = ['% of Passes Progressive', '% of Passes Forward', 'Long Pass %', 'Cross into Box %', 'Dribble %', 
                           'Forward Pass %', 'Backward Pass %','% of Passes Backward','Left Pass %','% of Passes Left','Right Pass %','% of Passes Right','Short Pass %','Ball Retention %','Pressured Pass %',
-                          'xG/Shot','Goal Conversion','xGOT per xG','Goals per xG','Big Chance Conversion','Tackle %','Tackle %','Defensive Third Tackle %','Average Defensive Action Distance','Aerial %','Attacking SP Aerial %','Defending SP Aerial %','GK 1v1s Save Rate','GK Avg. Distance','GK Save %','Big Chances Save %','PSV-99','PSV-85',]
+                          'xG/Shot','Goal Conversion','xGOT per xG','Goals per xG','Big Chance Conversion','Tackle %','Tackle %','Defensive Third Tackle %','Average Defensive Action Distance','Aerial %','Attacking SP Aerial %','Defending SP Aerial %',
+                          'GK 1v1s Save Rate','GK Avg. Distance','GK Save %','Big Chances Save %',
+                          ]
             
             
 
-            print(comp_data[comp_data['player_id'] == player_id][['Player', 'Season', 'Position Group', 'Minutes', 'PSV-99']])
-            for col in raw_cols:
-                if col not in special_cols:
+            #print(comp_data[comp_data['player_id'] == player_id][['Player', 'Season', 'Position Group', 'Minutes', 'Top Speed', 'Speed']])
+            for col in raw_cols + phys_pct_cols:
+                if col not in special_cols: #Add ratio??
                     comp_data[col] = comp_data[col] * comp_data['Minutes']
 
+            raw_and_phys = raw_cols + phys_cols + phys_pct_cols
 
-            aggs = {col: 'sum' for col in raw_cols if col not in special_cols}
+            aggs = {col: 'sum' for col in raw_and_phys if col not in special_cols}
             aggs['Position Group'] = concat_unique
             aggs['pos_group'] = concat_unique
             aggs['Team'] = 'first'
@@ -708,7 +745,7 @@ with st.sidebar:
             aggs['Detailed Position'] = 'first'
             aggs['Shortened Position'] = concat_unique
             aggs['Season'] = concat_season
-            # aggs['PSV-99'] = 'max'
+            # aggs['PSV-99'] = 'max' 
             # aggs['PSV-85'] = 'max'
             # aggs['Distance'] = 'max'
             # aggs['HI Running Distance'] = 'max'
@@ -720,13 +757,14 @@ with st.sidebar:
             
             comp_data = comp_data.groupby('Player').agg(aggs).reset_index()
 
-            for col in raw_cols:
+            for col in raw_cols + phys_pct_cols:
                 if col not in special_cols:
                     comp_data[col] = comp_data[col] / comp_data['Minutes']
-                    comp_data[f'pct{col}'] = round(comp_data[col].rank(pct=True) * 100,2)
+                    if col not in phys_cols:
+                        comp_data[f'pct{col}'] = round(comp_data[col].rank(pct=True) * 100,2)
 
             #print('after')
-            #print(comp_data[comp_data['player_id'] == player_id][['Player', 'Season', 'Position Group', 'Minutes', 'PSV-99']])
+            print(comp_data[comp_data['player_id'] == player_id][['Player', 'Season', 'Position Group', 'Minutes', 'Top Speed', 'pctTop Speed']])
             
 
             
@@ -750,8 +788,8 @@ with st.sidebar:
             comp_data['Heading'] = (0.7 * comp_data['pctAerial %']) + (0.3 * comp_data['pctAerial Wins'])
             comp_data['Set Piece Threat'] = (0.75 * comp_data['pctAttacking SP Aerial Wins']) + (0.25 * comp_data['pctAttacking SP Aerial %'])
 
-            comp_data['Speed'] = (0.4 * comp_data['pctPSV-99']) + (0.45 * comp_data['pctPSV-85']) + (0.15 * comp_data['pctSprinting Distance'])
-            comp_data['HSR Distance'] = (0.4 * comp_data['pctDistance']) + (0.6 * comp_data['pctHI Running Distance'])
+            # comp_data['Speed'] = (0.4 * comp_data['pctPSV-99']) + (0.45 * comp_data['pctPSV-85']) + (0.15 * comp_data['pctSprinting Distance'])
+            # comp_data['HSR Distance'] = (0.4 * comp_data['pctDistance']) + (0.6 * comp_data['pctHI Running Distance'])
 
             comp_data['High Pressing'] = (0.25 * comp_data['pctAttacking Half Pressures']) + (0.15 * comp_data['pctAttacking Third Pressures']) + (0.2 * comp_data['pctAttacking Half Pressure Regains']) + (0.1 * comp_data['pctPressure Regains Leading to Shots']) + (0.3 * comp_data['pctAverage Defensive Action Distance'])
             comp_data['Defending High'] = (0.2 * comp_data['pctAttacking Half Pressures']) + (0.05 * comp_data['pctAttacking Half Pressure Regains']) + (0.75 * comp_data['pctAverage Defensive Action Distance'])
@@ -759,10 +797,24 @@ with st.sidebar:
             comp_data['Defensive Output'] = (0.1 * comp_data['pctBlocks']) + (0.3 * comp_data['pctTackles Won']) + (0.4 * comp_data['pctBall Recoveries']) + (0.2 * comp_data['pctInterceptions'])
             comp_data['Receiving Forward'] = (0.6 * comp_data['pctFinal Third Receptions']) + (0.15 * comp_data['pctBox Receptions']) + (0.15 * comp_data['pctShots']) + (0.1 * comp_data['pctxG'])
 
-            rating_cols = ['Chance Creation', 'Crossing','Ball Progression', 'Ball Retention', 'Verticality', 'Carrying', 'Poaching', 'Finishing', 'Goal Threat', 'Heading', 'Set Piece Threat', 'Speed', 'HSR Distance', 'High Pressing', 'Defending High', 'Tackle Accuracy', 'Defensive Output', 'Receiving Forward']
+            # for col in comp_data.columns:
+            #     print(col)
+            comp_data['Speed'] = (1 * comp_data['pctTop Speed'])
+            comp_data['Intensity'] = (0.1 * comp_data['pctDistance']) + (0.3 * comp_data['pctRunning Distance']) + (0.2 * comp_data['pctHSR Distance']) + (0.15 * comp_data['pctSprinting Distance']) + (0.15 * comp_data['pctSprint Count']) + (0.1 * comp_data['pct% of Distance HI'])
+            comp_data['Explosiveness'] = (0.3 * comp_data['pctWalking to Sprint Count']) + (0.3 * comp_data['pctWalking to HSR Count']) + (0.2 * (100 - comp_data['pctTime to HSR'])) + (0.2 * (100 - comp_data['pctTime to Sprint']))
+            comp_data['Agility'] = (0.2 * comp_data['pctHigh Decels']) + (0.2 * comp_data['pctHigh Accels']) + (0.3 * comp_data['pctMedium Decels']) + (0.3 * comp_data['pctMedium Accels'])
 
+            # comp_data['Speed'] = round(comp_data['Speed'].rank(pct=True) * 100,2)
+            # comp_data['Intensity'] = round(comp_data['Intensity'].rank(pct=True) * 100,2)
+            # comp_data['Explosiveness'] = round(comp_data['Explosiveness'].rank(pct=True) * 100,2)
+            # comp_data['Agility'] = round(comp_data['Agility'].rank(pct=True) * 100,2)
+            rating_cols = ['Chance Creation', 'Crossing','Ball Progression', 'Ball Retention', 'Verticality', 'Carrying', 'Poaching', 'Finishing', 'Goal Threat', 'Heading', 'Set Piece Threat', 'Speed', 'Intensity', 'Explosiveness', 'Agility', 'High Pressing', 'Defending High', 'Tackle Accuracy', 'Defensive Output', 'Receiving Forward']
+
+            
             for x in rating_cols:
                 comp_data[x] = round(comp_data[x].rank(pct=True) * 100,2)
+                # if x in phys_cols: comp_data[x] = round(comp_data[x],2)
+                # else: comp_data[x] = round(comp_data[x].rank(pct=True) * 100,2)
 
 
             important_metrics = []
@@ -780,7 +832,7 @@ with st.sidebar:
             if 'CB' in positions:
                 #print('CB')
                 important_metrics.append(['Speed','Tackle Accuracy', 'Defending High', 'Defensive Output', 'Heading', 'Set Piece Threat', 'Ball Retention', 'Ball Progression', 'Verticality'])
-                selected_metrics.append(['PSV-99', 'Average Defensive Action Distance', 
+                selected_metrics.append(['Top Speed', 'Average Defensive Action Distance', 
                                          'Tackle %', 'Tackles Won',
                                          'Interceptions', 'Blocks',
                                          'Aerial Wins', 'Aerial %',
@@ -788,8 +840,8 @@ with st.sidebar:
                                          'Progressive Carries', 'Ball Retention %'])
             if 'FB/WB' in positions:
                 #print('FB/WB')
-                important_metrics.append(['Crossing','Chance Creation','Receiving Forward','Speed', 'High Pressing', 'Tackle Accuracy', 'Defensive Output',  'Ball Retention', 'Ball Progression', 'Carrying', 'HSR Distance', 'Goal Threat', 'Verticality', 'Heading',])
-                selected_metrics.append(['PSV-99', 'Distance',
+                important_metrics.append(['Crossing','Chance Creation','Receiving Forward','Speed', 'High Pressing', 'Tackle Accuracy', 'Defensive Output',  'Ball Retention', 'Ball Progression', 'Carrying', 'Intensity', 'Goal Threat', 'Verticality', 'Heading',])
+                selected_metrics.append(['Top Speed', 'HI Distance',
                                          'Key Passes', 'Big Chances Created',
                                          'xA', 'Assists',
                                          'Cross Shot Assists', 'Cross into Box %',
@@ -798,8 +850,8 @@ with st.sidebar:
                                          ])
             if 'CM' in positions:
                 #print('CM')
-                important_metrics.append(['Tackle Accuracy', 'Defensive Output', 'High Pressing', 'Heading', 'Set Piece Threat', 'Ball Retention', 'Ball Progression', 'Carrying','Receiving Forward','Chance Creation','Speed', 'HSR Distance', 'Goal Threat', 'Verticality'])
-                selected_metrics.append(['PSV-99', 'Distance',
+                important_metrics.append(['Tackle Accuracy', 'Defensive Output', 'High Pressing', 'Heading', 'Set Piece Threat', 'Ball Retention', 'Ball Progression', 'Carrying','Receiving Forward','Chance Creation','Speed', 'Intensity', 'Goal Threat', 'Verticality'])
+                selected_metrics.append(['Top Speed', 'HI Distance',
                                          'xA', 'Assists',
                                          'xG', 'Goals',
                                          'Progressive Passes', 'Progressive Carries',
@@ -810,8 +862,8 @@ with st.sidebar:
 
             if 'AM' in positions:
                 #print('AM')
-                important_metrics.append(['Chance Creation', 'Carrying', 'Speed', 'Goal Threat', 'Defensive Output', 'High Pressing', 'Chance Creation', 'Ball Progression', 'Ball Retention', 'Crossing',  'HSR Distance', 'Poaching', 'Finishing'])
-                selected_metrics.append(['PSV-99', 'Distance',
+                important_metrics.append(['Chance Creation', 'Carrying', 'Speed', 'Goal Threat', 'Defensive Output', 'High Pressing', 'Chance Creation', 'Ball Progression', 'Ball Retention', 'Crossing',  'Intensity', 'Poaching', 'Finishing'])
+                selected_metrics.append(['Top Speed', 'HI Distance',
                                         'Goals', 'xG',
                                         'Box Receptions', 'Goal Conversion',
                                         'Assists', 'xA',
@@ -819,8 +871,8 @@ with st.sidebar:
                                         'Attacking Third Pressures', 'Ball Recoveries'])
             if 'W' in positions:
                 #print('W')
-                important_metrics.append(['Chance Creation', 'Carrying', 'Speed', 'Goal Threat', 'Defensive Output', 'High Pressing', 'Chance Creation', 'Ball Progression', 'Ball Retention', 'Crossing',  'HSR Distance', 'Poaching', 'Finishing'])
-                selected_metrics.append(['PSV-99', 'Distance',
+                important_metrics.append(['Chance Creation', 'Carrying', 'Speed', 'Goal Threat', 'Defensive Output', 'High Pressing', 'Chance Creation', 'Ball Progression', 'Ball Retention', 'Crossing',  'Intensity', 'Poaching', 'Finishing'])
+                selected_metrics.append(['Top Speed', 'HI Distance',
                                         'Goals', 'xG',
                                         'Box Receptions', 'Goal Conversion',
                                         'Assists', 'xA',
@@ -829,20 +881,20 @@ with st.sidebar:
                 
             if 'ST' in positions:
                 #print('ST')
-                important_metrics.append(['Finishing', 'Poaching', 'High Pressing', 'Speed', 'HSR Distance', 'Defensive Output', 'Chance Creation', 'Ball Retention', 'Carrying',  'Goal Threat', 'Heading', 'Set Piece Threat'])
+                important_metrics.append(['Finishing', 'Poaching', 'High Pressing', 'Speed', 'Intensity', 'Defensive Output', 'Chance Creation', 'Ball Retention', 'Carrying',  'Goal Threat', 'Heading', 'Set Piece Threat'])
                 selected_metrics.append(['Goals', 'xG',
                                         'Shots', 'Box Receptions',
                                         'Goal Conversion', 'Big Chance Conversion',
                                         'Key Passes', 'Ball Retention %',
                                         'Attacking Third Pressures', 'Ball Recoveries',
-                                        'PSV-99', 'Distance'])
+                                        'Top Speed', 'HI Distance'])
 
             #important_metrics = list(set(item for sublist in important_metrics for item in sublist))
 
-            all_ratings = ['Speed', 'HSR Distance', 'Defensive Output', 'Defending High', 'High Pressing', 'Tackle Accuracy', 'Heading', 'Ball Retention', 'Ball Progression', 'Verticality', 'Carrying', 'Chance Creation', 'Crossing', 'Poaching', 'Finishing', 'Goal Threat', 'Receiving Forward', 'Set Piece Threat','Shot Stopping', 'Short Distribution', 'Long Distribution', 'Stepping Out', 'Saving Big Chances', '1v1 Saving']
+            all_ratings = ['Speed', 'Intensity', 'Explosivness', 'Agility', 'Defensive Output', 'Defending High', 'High Pressing', 'Tackle Accuracy', 'Heading', 'Ball Retention', 'Ball Progression', 'Verticality', 'Carrying', 'Chance Creation', 'Crossing', 'Poaching', 'Finishing', 'Goal Threat', 'Receiving Forward', 'Set Piece Threat','Shot Stopping', 'Short Distribution', 'Long Distribution', 'Stepping Out', 'Saving Big Chances', '1v1 Saving']
             #all_metrics = [col for col in comp_data.columns[11:] if col not in all_ratings and col[:3] != 'pct']
-            all_metrics = ['Key Passes','Big Chances Created','Pass OBV','Passes into Final Third','Passes into Box','Progressive Passes','Through Passes','% of Passes Progressive','% of Passes Forward','xA','Assists','Long Passes Completed','Long Pass %','Crosses Completed into Box','Cross into Box %','Cross Shot Assists','Cross Assists','Dribble OBV','Carries','Take Ons','Dribble %','Progressive Carries','Progressive Carries in Final Third','Carries into Final Third','Carries in Final Third','Final Third Take Ons','Forward Pass %','Backward Pass %','% of Passes Backward','% of Passes Left','% of Passes Right','Short Pass %','Ball Retention %','Pressured Pass %','Fouls Won','Passes Completed','Passes Received','Passes Received Under Pressure','Final Third Receptions','Zone 14 Receptions','Box Receptions','Six Yard Box Receptions','Goals','Shots','xG','xG/Shot','Goal Conversion','xGOT','xGOT per xG','Goals per xG','Big Chances','Big Chance Conversion','Blocks','Tackles Won','Tackle %','Defensive OBV','Ball Recoveries','Pressures','Counterpressures','Defensive Third Blocks','Defensive Third Tackles Won','Defensive Third Tackle to Dribbled Past Ratio','Defensive Third Defensive OBV','Defensive Third Ball Recoveries','Defensive Third Pressures','Defensive Third Counterpressures','Attacking Third Pressures','Attacking Third Counterpressures','Interceptions','Attacking Third Tackles','Attacking Third Interceptions','Average Defensive Action Distance','Attacking Half Pressures','Attacking Half Counterpressures','Attacking Half Tackles','Attacking Half Interceptions','Attacking Half Pressure Regains','Pressure Regains Leading to Shots','Aerial Wins','Aerial %','Attacking SP Aerial Wins','Defensive SP Aerial Wins','Attacking SP Aerial %','Defending SP Aerial %','Defensive Third Interceptions','GK Shots Faced','GK Shots on Target Faced','GK Goals Conceded','GK Saves','GK xG Against','GK xGOT Against','GK 1v1s Save Rate','GK Avg. Distance','GK Save %','Goals Prevented','Big Chances Faced','Big Chances Saved','Big Chances Save %','PSV-99','PSV-85','Distance','HI Running Distance','Sprinting Distance','Count High Acceleration','Count High Deceleration']
-            
+            all_metrics = ['Key Passes','Big Chances Created','Pass OBV','Passes into Final Third','Passes into Box','Progressive Passes','Through Passes','% of Passes Progressive','% of Passes Forward','xA','Assists','Long Passes Completed','Long Pass %','Crosses Completed into Box','Cross into Box %','Cross Shot Assists','Cross Assists','Dribble OBV','Carries','Take Ons','Dribble %','Progressive Carries','Progressive Carries in Final Third','Carries into Final Third','Carries in Final Third','Final Third Take Ons','Forward Pass %','Backward Pass %','% of Passes Backward','% of Passes Left','% of Passes Right','Short Pass %','Ball Retention %','Pressured Pass %','Fouls Won','Passes Completed','Passes Received','Passes Received Under Pressure','Final Third Receptions','Zone 14 Receptions','Box Receptions','Six Yard Box Receptions','Goals','Shots','xG','xG/Shot','Goal Conversion','xGOT','xGOT per xG','Goals per xG','Big Chances','Big Chance Conversion','Blocks','Tackles Won','Tackle %','Defensive OBV','Ball Recoveries','Pressures','Counterpressures','Defensive Third Blocks','Defensive Third Tackles Won','Defensive Third Tackle to Dribbled Past Ratio','Defensive Third Defensive OBV','Defensive Third Ball Recoveries','Defensive Third Pressures','Defensive Third Counterpressures','Attacking Third Pressures','Attacking Third Counterpressures','Interceptions','Attacking Third Tackles','Attacking Third Interceptions','Average Defensive Action Distance','Attacking Half Pressures','Attacking Half Counterpressures','Attacking Half Tackles','Attacking Half Interceptions','Attacking Half Pressure Regains','Pressure Regains Leading to Shots','Aerial Wins','Aerial %','Attacking SP Aerial Wins','Defensive SP Aerial Wins','Attacking SP Aerial %','Defending SP Aerial %','Defensive Third Interceptions','GK Shots Faced','GK Shots on Target Faced','GK Goals Conceded','GK Saves','GK xG Against','GK xGOT Against','GK 1v1s Save Rate','GK Avg. Distance','GK Save %','Goals Prevented','Big Chances Faced','Big Chances Saved','Big Chances Save %']
+            all_metrics = all_metrics + phys_cols            
             
 
 
@@ -964,16 +1016,19 @@ with st.sidebar:
 
 
                     #comp_data['Distance'] = comp_data['Distance'].fillna(0).astype(int)
-                    comp_data2['PSV-99'] = comp_data2['PSV-99'].fillna(comp_data2.groupby('player_id')['PSV-99'].transform('mean'))
-                    comp_data2['PSV-85'] = comp_data2['PSV-85'].fillna(comp_data2.groupby('player_id')['PSV-85'].transform('mean'))
-                    comp_data2['Distance'] = comp_data2['Distance'].fillna(comp_data2.groupby('player_id')['Distance'].transform('mean'))
-                    comp_data2['HI Running Distance'] = comp_data2['HI Running Distance'].fillna(comp_data2.groupby('player_id')['HI Running Distance'].transform('mean'))
-                    comp_data2['Sprinting Distance'] = comp_data2['Sprinting Distance'].fillna(comp_data2.groupby('player_id')['Sprinting Distance'].transform('mean'))
-                    comp_data2['Count High Acceleration'] = comp_data2['Count High Acceleration'].fillna(comp_data2.groupby('player_id')['Count High Acceleration'].transform('mean'))
-                    comp_data2['Count High Deceleration'] = comp_data2['Count High Deceleration'].fillna(comp_data2.groupby('player_id')['Count High Deceleration'].transform('mean'))
+                    
+                    for col in phys_cols:
+                        comp_data2[col] = comp_data2[col].fillna(comp_data2.groupby('player_id')[col].transform('mean'))
+                    # comp_data2['PSV-99'] = comp_data2['PSV-99'].fillna(comp_data2.groupby('player_id')['PSV-99'].transform('mean'))
+                    # comp_data2['PSV-85'] = comp_data2['PSV-85'].fillna(comp_data2.groupby('player_id')['PSV-85'].transform('mean'))
+                    # comp_data2['Distance'] = comp_data2['Distance'].fillna(comp_data2.groupby('player_id')['Distance'].transform('mean'))
+                    # comp_data2['HI Running Distance'] = comp_data2['HI Running Distance'].fillna(comp_data2.groupby('player_id')['HI Running Distance'].transform('mean'))
+                    # comp_data2['Sprinting Distance'] = comp_data2['Sprinting Distance'].fillna(comp_data2.groupby('player_id')['Sprinting Distance'].transform('mean'))
+                    # comp_data2['Count High Acceleration'] = comp_data2['Count High Acceleration'].fillna(comp_data2.groupby('player_id')['Count High Acceleration'].transform('mean'))
+                    # comp_data2['Count High Deceleration'] = comp_data2['Count High Deceleration'].fillna(comp_data2.groupby('player_id')['Count High Deceleration'].transform('mean'))
 
-                    for col in raw_cols:
-                        if col not in special_cols:
+                    for col in raw_cols + phys_pct_cols:
+                        if col not in special_cols:#and col not in phys_cols:
                             comp_data2[col] = comp_data2[col] * comp_data2['Minutes']
 
 
@@ -981,10 +1036,10 @@ with st.sidebar:
                     #print(comp_data2[comp_data2[['player_id'] == player_id2]][['Player', 'Minutes']])
                     comp_data2 = comp_data2.groupby('Player').agg(aggs).reset_index()
 
-                    for col in raw_cols:
-                        if col not in special_cols:
+                    for col in raw_cols + phys_pct_cols:
+                        if col not in special_cols:# and col not in phys_cols:
                             comp_data2[col] = comp_data2[col] / comp_data2['Minutes']
-                            comp_data2[f'pct{col}'] = round(comp_data2[col].rank(pct=True) * 100,2)
+                            if col not in phys_cols + phys_pct_cols: comp_data2[f'pct{col}'] = round(comp_data2[col].rank(pct=True) * 100,2)
                     #print(comp_data2[comp_data2[['player_id'] == player_id2]][['Player', 'Minutes']])
                     mins2 = comp_data2.loc[comp_data2['player_id'] == player_id2,'Minutes'].values[0]
                     #print(mins2)
@@ -1011,8 +1066,8 @@ with st.sidebar:
                     comp_data2['Heading'] = (0.7 * comp_data2['pctAerial %']) + (0.3 * comp_data2['pctAerial Wins'])
                     comp_data2['Set Piece Threat'] = (0.75 * comp_data2['pctAttacking SP Aerial Wins']) + (0.25 * comp_data2['pctAttacking SP Aerial %'])
 
-                    comp_data2['Speed'] = (0.4 * comp_data2['pctPSV-99']) + (0.45 * comp_data2['pctPSV-85']) + (0.15 * comp_data2['pctSprinting Distance'])
-                    comp_data2['HSR Distance'] = (0.4 * comp_data2['pctDistance']) + (0.6 * comp_data2['pctHI Running Distance'])
+                    # comp_data2['Speed'] = (0.4 * comp_data2['pctPSV-99']) + (0.45 * comp_data2['pctPSV-85']) + (0.15 * comp_data2['pctSprinting Distance'])
+                    # comp_data2['HSR Distance'] = (0.4 * comp_data2['pctDistance']) + (0.6 * comp_data2['pctHI Running Distance'])
 
                     comp_data2['High Pressing'] = (0.25 * comp_data2['pctAttacking Half Pressures']) + (0.15 * comp_data2['pctAttacking Third Pressures']) + (0.2 * comp_data2['pctAttacking Half Pressure Regains']) + (0.1 * comp_data2['pctPressure Regains Leading to Shots']) + (0.3 * comp_data2['pctAverage Defensive Action Distance'])
                     comp_data2['Defending High'] = (0.2 * comp_data2['pctAttacking Half Pressures']) + (0.05 * comp_data2['pctAttacking Half Pressure Regains']) + (0.75 * comp_data2['pctAverage Defensive Action Distance'])
@@ -1020,10 +1075,11 @@ with st.sidebar:
                     comp_data2['Defensive Output'] = (0.1 * comp_data2['pctBlocks']) + (0.3 * comp_data2['pctTackles Won']) + (0.4 * comp_data2['pctBall Recoveries']) + (0.2 * comp_data2['pctInterceptions'])
                     comp_data2['Receiving Forward'] = (0.6 * comp_data2['pctFinal Third Receptions']) + (0.15 * comp_data2['pctBox Receptions']) + (0.15 * comp_data2['pctShots']) + (0.1 * comp_data2['pctxG'])
 
-                    rating_cols = ['Chance Creation', 'Crossing','Ball Progression', 'Ball Retention', 'Verticality', 'Carrying', 'Poaching', 'Finishing', 'Goal Threat', 'Heading', 'Set Piece Threat', 'Speed', 'HSR Distance', 'High Pressing', 'Defending High', 'Tackle Accuracy', 'Defensive Output', 'Receiving Forward']
+                    rating_cols = ['Chance Creation', 'Crossing','Ball Progression', 'Ball Retention', 'Verticality', 'Carrying', 'Poaching', 'Finishing', 'Goal Threat', 'Heading', 'Set Piece Threat', 'Speed', 'Intensity', 'Explosiveness', 'Agility', 'High Pressing', 'Defending High', 'Tackle Accuracy', 'Defensive Output', 'Receiving Forward']
 
                     for x in rating_cols:
-                        comp_data2[x] = round(comp_data2[x].rank(pct=True) * 100,2)
+                        if x in phys_cols: comp_data2[x] = round(comp_data2[x], 2)
+                        else: comp_data2[x] = round(comp_data2[x].rank(pct=True) * 100,2)
 
 
 
@@ -1166,9 +1222,48 @@ if start_graphic:
         )
 
     #player_bio_text = f"{team_name} - {player_age} - {player_height}"
+    def format_seasons(seasons_list):
+        # Handle empty list
+        if not seasons_list:
+            return ""
+        
+        # Sort the seasons
+        # For YYYY format
+        if all(len(s) == 4 and s.isdigit() for s in seasons_list):
+            sorted_seasons = sorted(seasons_list, key=lambda x: int(x))
+            years = [int(year) for year in sorted_seasons]
+            
+            # Check if it's a continuous range
+            if years == list(range(min(years), max(years) + 1)):
+                return f"{min(years)}-{max(years)}"
+            else:
+                return ", ".join(sorted_seasons)
+        
+        # For YY/YY format
+        elif all("/" in s for s in seasons_list):
+            # Extract the starting year from each season for sorting
+            sorted_seasons = sorted(seasons_list, key=lambda x: int(x.split("/")[0]))
+            
+            # Check if it's a continuous range
+            continuous = True
+            for i in range(len(sorted_seasons) - 1):
+                current_end = sorted_seasons[i].split("/")[1]
+                next_start = sorted_seasons[i+1].split("/")[0]
+                if current_end != next_start:
+                    continuous = False
+                    break
+            
+            if continuous and len(sorted_seasons) > 1:
+                return f"{sorted_seasons[0]}-{sorted_seasons[-1]}"
+            else:
+                return ", ".join(sorted_seasons)
+        
+        # For mixed formats or other cases
+        else:
+            return ", ".join(sorted(seasons_list))
 
     ax.text(
-        0.05, 0.937, 'Data Report',  # Coordinates: (0, 1) for top-left in normalized figure coordinates
+        0.05, 0.937, f'Data Report {format_seasons(seasons)}',  # Coordinates: (0, 1) for top-left in normalized figure coordinates
         color="white",  # Text color
         fontsize=30,    # Text size
         ha="left", va="top",  # Align text to the top-left corner
