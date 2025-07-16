@@ -766,7 +766,7 @@ with st.sidebar:
             #print('after')
             print(comp_data[comp_data['player_id'] == player_id][['Player', 'Season', 'Position Group', 'Minutes', 'Top Speed', 'pctTop Speed']])
             
-
+            
             
             #comp_data['GK_Difficulty_Faced_Raw'] = (0.3 * comp_data['pctGK Shots on Target Faced']) + (0.2 * comp_data['pctGK xG Against']) + (0.2 * comp_data['pctGK xGOT Against']) + (0.3 * comp_data['pctBig Chances Faced'])
             comp_data['Shot Stopping'] = (0.05 * comp_data['pctGK Shots on Target Faced']) + (0.1 * comp_data['pctBig Chances Save %']) + (0.7 * comp_data['pctGoals Prevented']) + (0.15 * comp_data['pctGK Save %'])
@@ -1068,6 +1068,10 @@ with st.sidebar:
 
                     # comp_data2['Speed'] = (0.4 * comp_data2['pctPSV-99']) + (0.45 * comp_data2['pctPSV-85']) + (0.15 * comp_data2['pctSprinting Distance'])
                     # comp_data2['HSR Distance'] = (0.4 * comp_data2['pctDistance']) + (0.6 * comp_data2['pctHI Running Distance'])
+                    comp_data2['Speed'] = (1 * comp_data2['pctTop Speed'])
+                    comp_data2['Intensity'] = (0.1 * comp_data2['pctDistance']) + (0.3 * comp_data2['pctRunning Distance']) + (0.2 * comp_data2['pctHSR Distance']) + (0.15 * comp_data2['pctSprinting Distance']) + (0.15 * comp_data2['pctSprint Count']) + (0.1 * comp_data2['pct% of Distance HI'])
+                    comp_data2['Explosiveness'] = (0.3 * comp_data2['pctWalking to Sprint Count']) + (0.3 * comp_data2['pctWalking to HSR Count']) + (0.2 * (100 - comp_data2['pctTime to HSR'])) + (0.2 * (100 - comp_data2['pctTime to Sprint']))
+                    comp_data2['Agility'] = (0.2 * comp_data2['pctHigh Decels']) + (0.2 * comp_data2['pctHigh Accels']) + (0.3 * comp_data2['pctMedium Decels']) + (0.3 * comp_data2['pctMedium Accels'])
 
                     comp_data2['High Pressing'] = (0.25 * comp_data2['pctAttacking Half Pressures']) + (0.15 * comp_data2['pctAttacking Third Pressures']) + (0.2 * comp_data2['pctAttacking Half Pressure Regains']) + (0.1 * comp_data2['pctPressure Regains Leading to Shots']) + (0.3 * comp_data2['pctAverage Defensive Action Distance'])
                     comp_data2['Defending High'] = (0.2 * comp_data2['pctAttacking Half Pressures']) + (0.05 * comp_data2['pctAttacking Half Pressure Regains']) + (0.75 * comp_data2['pctAverage Defensive Action Distance'])
