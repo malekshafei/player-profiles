@@ -727,11 +727,12 @@ with st.sidebar:
             
 
             #print(comp_data[comp_data['player_id'] == player_id][['Player', 'Season', 'Position Group', 'Minutes', 'Top Speed', 'Speed']])
-            for col in raw_cols + phys_pct_cols:
-                if col not in special_cols: #Add ratio??
+            print(comp_data[comp_data['player_id'] == player_id][['Player', 'Season', 'Position Group', 'Minutes', 'Top Speed']])
+            for col in raw_cols + phys_cols:
+                if col not in special_cols + ['Top Speed']: #Add ratio??
                     comp_data[col] = comp_data[col] * comp_data['Minutes']
 
-            raw_and_phys = raw_cols + phys_cols + phys_pct_cols
+            raw_and_phys = raw_cols + phys_cols# + phys_pct_cols
 
             aggs = {col: 'sum' for col in raw_and_phys if col not in special_cols}
             aggs['Position Group'] = concat_unique
@@ -745,6 +746,7 @@ with st.sidebar:
             aggs['Detailed Position'] = 'first'
             aggs['Shortened Position'] = concat_unique
             aggs['Season'] = concat_season
+            aggs['Top Speed'] = 'max'
             # aggs['PSV-99'] = 'max' 
             # aggs['PSV-85'] = 'max'
             # aggs['Distance'] = 'max'
@@ -757,13 +759,13 @@ with st.sidebar:
             
             comp_data = comp_data.groupby('Player').agg(aggs).reset_index()
 
-            for col in raw_cols + phys_pct_cols:
-                if col not in special_cols:
+            for col in raw_and_phys:# + phys_pct_cols:
+                if col not in special_cols + ['Top Speed']:
                     comp_data[col] = comp_data[col] / comp_data['Minutes']
-                    if col not in phys_cols:
-                        comp_data[f'pct{col}'] = round(comp_data[col].rank(pct=True) * 100,2)
+                    comp_data[f'pct{col}'] = round(comp_data[col].rank(pct=True) * 100,2)
 
-            #print('after')
+            comp_data[f'pctTop Speed'] = round(comp_data['Top Speed'].rank(pct=True) * 100,2)
+            print('after')
             print(comp_data[comp_data['player_id'] == player_id][['Player', 'Season', 'Position Group', 'Minutes', 'Top Speed', 'pctTop Speed']])
             
             
@@ -1027,8 +1029,8 @@ with st.sidebar:
                     # comp_data2['Count High Acceleration'] = comp_data2['Count High Acceleration'].fillna(comp_data2.groupby('player_id')['Count High Acceleration'].transform('mean'))
                     # comp_data2['Count High Deceleration'] = comp_data2['Count High Deceleration'].fillna(comp_data2.groupby('player_id')['Count High Deceleration'].transform('mean'))
 
-                    for col in raw_cols + phys_pct_cols:
-                        if col not in special_cols:#and col not in phys_cols:
+                    for col in raw_and_phys:# + phys_pct_cols:
+                        if col not in special_cols + ['Top Speed']:#and col not in phys_cols:
                             comp_data2[col] = comp_data2[col] * comp_data2['Minutes']
 
 
@@ -1036,10 +1038,12 @@ with st.sidebar:
                     #print(comp_data2[comp_data2[['player_id'] == player_id2]][['Player', 'Minutes']])
                     comp_data2 = comp_data2.groupby('Player').agg(aggs).reset_index()
 
-                    for col in raw_cols + phys_pct_cols:
-                        if col not in special_cols:# and col not in phys_cols:
+                    for col in raw_and_phys:# + phys_pct_cols:
+                        if col not in special_cols + ['Top Speed']:# and col not in phys_cols:
                             comp_data2[col] = comp_data2[col] / comp_data2['Minutes']
-                            if col not in phys_cols + phys_pct_cols: comp_data2[f'pct{col}'] = round(comp_data2[col].rank(pct=True) * 100,2)
+                            comp_data2[f'pct{col}'] = round(comp_data2[col].rank(pct=True) * 100,2)
+
+                    comp_data2[f'pctTop Speed'] = round(comp_data2['Top Speed'].rank(pct=True) * 100,2)
                     #print(comp_data2[comp_data2[['player_id'] == player_id2]][['Player', 'Minutes']])
                     mins2 = comp_data2.loc[comp_data2['player_id'] == player_id2,'Minutes'].values[0]
                     #print(mins2)
